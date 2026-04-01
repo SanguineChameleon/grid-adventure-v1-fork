@@ -2,7 +2,7 @@ from collections.abc import Callable
 from typing import Any
 
 from grid_universe.state import State
-from grid_universe.env import GridUniverseEnv
+from grid_universe.env import GridUniverseEnv, ImageObservation as ImageObservation
 from grid_universe.renderer.image import ImageMap, DEFAULT_RESOLUTION
 from grid_universe.grid.gridstate import GridState
 
@@ -44,3 +44,6 @@ class GridAdventureEnv(GridUniverseEnv):
             "Environment state is not initialized. Call reset() to initialize."
         )
         return from_state(self.state)
+
+
+___all___ = ["GridAdventureEnv", "ImageObservation"]
