@@ -57,11 +57,7 @@ from grid_adventure.gym_env import GridAdventureEnv
 from grid_adventure.examples.maze import generate
 import numpy as np
 
-env = GridAdventureEnv(
-    initial_state_fn=generate,
-    width=9,
-    height=9
-)
+env = GridAdventureEnv(initial_state_fn=generate, width=9, height=9)
 obs, info = env.reset()
 
 image = obs["image"]  # Shape: (H, W, 4), dtype: uint8
@@ -71,11 +67,13 @@ height, width, channels = image.shape
 
 # Save as PNG
 from PIL import Image
+
 pil_image = Image.fromarray(image)
 pil_image.save("screenshot.png")
 
 # Display with matplotlib
 import matplotlib.pyplot as plt
+
 plt.imshow(image)
 plt.axis("off")
 plt.show()
@@ -89,11 +87,7 @@ plt.show()
 from grid_adventure.gym_env import GridAdventureEnv
 from grid_adventure.examples.maze import generate
 
-env = GridAdventureEnv(
-    initial_state_fn=generate,
-    width=9,
-    height=9
-)
+env = GridAdventureEnv(initial_state_fn=generate, width=9, height=9)
 obs, info = env.reset()
 
 # Access the rendered image data

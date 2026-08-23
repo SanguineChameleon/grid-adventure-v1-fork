@@ -288,14 +288,20 @@ UnlockedDoorEntity is not interactable with agent and serves only an aesthetic p
 from grid_adventure.step import step
 
 # Creation of the grid still requires use of GridState
-gridstate = GridState(width=4, height=3, movement=MOVEMENTS["cardinal"], objective=OBJECTIVES["collect_gems_and_exit"], seed=0,)
+gridstate = GridState(
+    width=4,
+    height=3,
+    movement=MOVEMENTS["cardinal"],
+    objective=OBJECTIVES["collect_gems_and_exit"],
+    seed=0,
+)
 for y in range(gridstate.height):
     for x in range(gridstate.width):
         gridstate.add((x, y), FloorEntity())
 # Add an agent entity, box and exit to the grid
 gridstate.add((0, 1), AgentEntity())
-gridstate.add((1,1), BoxEntity())
-gristate.add((3,1), ExitEntity())
+gridstate.add((1, 1), BoxEntity())
+gristate.add((3, 1), ExitEntity())
 
 # Convert GridState to the immutable State representation
 state = to_state(gridstate)
@@ -307,20 +313,22 @@ state = to_state(gridstate)
 
 # Retrieve the agent's EntityID
 agent_id = next(iter(state.agent.keys()))
-box_entity_ids = list(state.pushable.keys()) # Find all entities that are pushable. Since only 1 box is added, it contains the entity id of the box
+box_entity_ids = list(
+    state.pushable.keys()
+)  # Find all entities that are pushable. Since only 1 box is added, it contains the entity id of the box
 box_id = box_entity_ids[0]
 
 # Look up current position
-agent_position = state.position.get(agent_id) #(0,1)
-box_position = state.position.get(box_id) #(1,1)
+agent_position = state.position.get(agent_id)  # (0,1)
+box_position = state.position.get(box_id)  # (1,1)
 
 # Check whether the entity is considered blocking
-is__agent_blocking = agent_id in state.blocking # False
-is_box_blocking = box_id in state.blocking # True
+is__agent_blocking = agent_id in state.blocking  # False
+is_box_blocking = box_id in state.blocking  # True
 
 # Apply an action using step. step returns a new State
 state = step(state, Action.RIGHT)
 
 # After stepping, the agent's position in state_3_1.position is updated
-new_agent_position = state.position.get(agent_id) #(1,1)
+new_agent_position = state.position.get(agent_id)  # (1,1)
 ```
