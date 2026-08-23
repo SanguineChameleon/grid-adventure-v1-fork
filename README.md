@@ -16,7 +16,7 @@ pip install -e .
 pip install -e ".[play]"  # Includes grid-play for playing the game
 ```
 
-Requires Python 3.11+.
+Requires Python 3.13+.
 
 ## Play
 

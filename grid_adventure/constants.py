@@ -3,7 +3,7 @@ DEFAULT_AGENT_HEALTH = 5
 
 # Reward and cost values
 COIN_REWARD = 5
-FLOOR_COST = 3
+STEP_COST = 3
 
 # Damage values
 HAZARD_DAMAGE = 2

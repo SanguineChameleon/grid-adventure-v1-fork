@@ -1,34 +1,32 @@
 from __future__ import annotations
 
-from grid_universe.state import State
-from grid_universe.grid.gridstate import GridState
+from grid_universe.actions import Action
 from grid_universe.grid.convert import from_state as base_from_state
 from grid_universe.grid.convert import to_state as base_to_state
 from grid_universe.grid.entity import BaseEntity, copy_entity_components
+from grid_universe.grid.gridstate import GridState
 from grid_universe.grid.step import step as base_step
-from grid_universe.actions import Action
+from grid_universe.state import State
 
 # Specialized entity classes from Grid Adventure
 from grid_adventure.entities import (
     AgentEntity,
-    FloorEntity,
-    WallEntity,
-    ExitEntity,
+    BoxEntity,
     CoinEntity,
+    ExitEntity,
     GemEntity,
     KeyEntity,
-    LockedDoorEntity,
-    UnlockedDoorEntity,
-    BoxEntity,
     LavaEntity,
-    SpeedPowerUpEntity,
-    ShieldPowerUpEntity,
+    LockedDoorEntity,
     PhasingPowerUpEntity,
+    ShieldPowerUpEntity,
+    SpeedPowerUpEntity,
+    UnlockedDoorEntity,
+    WallEntity,
 )
 
 SpecializedTypes = (
     AgentEntity,
-    FloorEntity,
     WallEntity,
     ExitEntity,
     CoinEntity,
@@ -106,8 +104,6 @@ def _specialize_single(obj: BaseEntity) -> BaseEntity:
     if app_name == "lava":
         return copy_entity_components(obj, LavaEntity(), preserve_entity_id=True)
     # Background tiles
-    if app_name == "floor":
-        return copy_entity_components(obj, FloorEntity(), preserve_entity_id=True)
     if app_name == "wall":
         return copy_entity_components(obj, WallEntity(), preserve_entity_id=True)
 
@@ -123,16 +119,14 @@ def _specialize_nested_list(items: list[BaseEntity] | None) -> list[BaseEntity]:
 
 
 def specialize_entities(gridstate: GridState) -> GridState:
-    """
-    Returns a new GridState with entities replaced by specialized Grid Adventure subclasses.
-    Also remaps cross-entity references to the new instances.
-    """
+    """Return a copy using specialized Grid Adventure entity subclasses."""
     new_grid_state = GridState(
         width=gridstate.width,
         height=gridstate.height,
         movement=gridstate.movement,
         objective=gridstate.objective,
         seed=gridstate.seed,
+        step_cost=gridstate.step_cost,
         turn=gridstate.turn,
         score=gridstate.score,
         win=gridstate.win,
@@ -141,8 +135,6 @@ def specialize_entities(gridstate: GridState) -> GridState:
         turn_limit=gridstate.turn_limit,
     )
 
-    # First pass: specialize and map original object id -> new specialized object
-    obj_map: dict[int, BaseEntity] = {}
     for x in range(gridstate.width):
         for y in range(gridstate.height):
             specialized_cell: list[BaseEntity] = []
@@ -153,19 +145,12 @@ def specialize_entities(gridstate: GridState) -> GridState:
                 if hasattr(spec_obj, "inventory_list"):
                     inv_list = getattr(spec_obj, "inventory_list", None)
                     if inv_list:
-                        setattr(
-                            spec_obj,
-                            "inventory_list",
-                            _specialize_nested_list(inv_list),
-                        )
+                        spec_obj.inventory_list = _specialize_nested_list(inv_list)
                 if hasattr(spec_obj, "status_list"):
                     st_list = getattr(spec_obj, "status_list", None)
                     if st_list:
-                        setattr(
-                            spec_obj, "status_list", _specialize_nested_list(st_list)
-                        )
+                        spec_obj.status_list = _specialize_nested_list(st_list)
 
-                obj_map[id(orig_obj)] = spec_obj
                 specialized_cell.append(spec_obj)
 
             new_grid_state.grid[x][y] = specialized_cell
@@ -188,4 +173,4 @@ def step(gridstate: GridState, action: Action) -> GridState:
     return specialize_entities(base_step(gridstate, action))
 
 
-__all__ = ["from_state", "to_state", "specialize_entities", "step", "GridState"]
+__all__ = ["GridState", "from_state", "specialize_entities", "step", "to_state"]

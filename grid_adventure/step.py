@@ -1,9 +1,16 @@
 from grid_universe.actions import Action
 from grid_universe.state import State
 from grid_universe.step import step as _step
+from grid_universe.types import EntityID
 
 
-def step(state: State, action: Action) -> State:
+def step(
+    state: State,
+    action: Action,
+    agent_id: EntityID | None = None,
+    *,
+    in_place: bool = False,
+) -> State:
     """Advance the environment state by one step given an action.
 
     This function wraps the base `grid_universe.step.step` function to
@@ -19,4 +26,4 @@ def step(state: State, action: Action) -> State:
     assert state.agent is not None and len(state.agent) == 1, (
         "State must have exactly one agent."
     )
-    return _step(state, action)
+    return _step(state, action, agent_id=agent_id, in_place=in_place)

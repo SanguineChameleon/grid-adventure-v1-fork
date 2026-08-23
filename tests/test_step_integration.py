@@ -1,9 +1,11 @@
+from grid_universe.actions import Action
+from grid_universe.components.properties import Position
+from grid_universe.grid.convert import to_state
 from grid_universe.state import State
 from grid_universe.types import EntityID
-from grid_universe.actions import Action
-from grid_universe.grid.convert import to_state
 from grid_universe.utils.ecs import entities_with_components_at
-from grid_universe.components.properties import Position
+
+from grid_adventure.constants import STEP_COST
 from grid_adventure.levels import intro
 from grid_adventure.step import step as adv_step
 
@@ -15,6 +17,14 @@ def _agent_id(state: State) -> EntityID:
 def _agent_pos(state: State) -> Position:
     aid = _agent_id(state)
     return state.position[aid]
+
+
+def test_all_intro_levels_use_configured_step_cost():
+    builders = (
+        getattr(intro, name) for name in dir(intro) if name.startswith("build_level_")
+    )
+
+    assert all(builder().step_cost == STEP_COST for builder in builders)
 
 
 # ---- L0 ----

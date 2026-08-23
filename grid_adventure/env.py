@@ -1,10 +1,10 @@
 from collections.abc import Callable
 from typing import Any
 
-from grid_universe.state import State
-from grid_universe.env import GridUniverseEnv, ImageObservation as ImageObservation
-from grid_universe.renderer.image import ImageMap, DEFAULT_RESOLUTION
+from grid_universe.env import GridUniverseEnv, ImageObservation
 from grid_universe.grid.gridstate import GridState
+from grid_universe.renderer.image import DEFAULT_RESOLUTION, ImageMap
+from grid_universe.state import State
 
 from grid_adventure.grid import from_state
 from grid_adventure.rendering import DEFAULT_ASSET_ROOT, IMAGE_MAP
@@ -39,11 +39,11 @@ class GridAdventureEnv(GridUniverseEnv):
 
     @property
     def gridstate(self) -> GridState:
-        """Return the current state as a GridState dataclass"""
+        """Return the current state as a specialized Grid Adventure GridState."""
         assert self.state is not None, (
             "Environment state is not initialized. Call reset() to initialize."
         )
         return from_state(self.state)
 
 
-___all___ = ["GridAdventureEnv", "ImageObservation"]
+__all__ = ["GridAdventureEnv", "ImageObservation"]

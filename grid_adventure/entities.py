@@ -1,4 +1,3 @@
-from pyrsistent import pset
 from dataclasses import dataclass, field
 
 from grid_universe.components.effects.immunity import Immunity
@@ -11,7 +10,6 @@ from grid_universe.components.properties.appearance import Appearance
 from grid_universe.components.properties.blocking import Blocking
 from grid_universe.components.properties.collectible import Collectible
 from grid_universe.components.properties.collidable import Collidable
-from grid_universe.components.properties.cost import Cost
 from grid_universe.components.properties.damage import Damage
 from grid_universe.components.properties.exit import Exit
 from grid_universe.components.properties.health import Health
@@ -25,10 +23,9 @@ from grid_universe.components.properties.status import Status
 from grid_universe.grid.entity import BaseEntity
 
 from grid_adventure.constants import (
-    DEFAULT_AGENT_HEALTH,
     COIN_REWARD,
+    DEFAULT_AGENT_HEALTH,
     HAZARD_DAMAGE,
-    FLOOR_COST,
     KEY_DOOR_ID,
     PHASING_POWERUP_DURATION,
     SHIELD_POWERUP_USAGE,
@@ -36,28 +33,27 @@ from grid_adventure.constants import (
     SPEED_POWERUP_MULTIPLIER,
 )
 
-
 # Base entity classes with common components.
 
 
 @dataclass(repr=False)
 class CollidableEntity(BaseEntity):
-    collidable: Collidable = Collidable()
+    collidable: Collidable = field(default_factory=Collidable)
 
 
 @dataclass(repr=False)
 class BlockingEntity(BaseEntity):
-    blocking: Blocking = Blocking()
+    blocking: Blocking = field(default_factory=Blocking)
 
 
 @dataclass(repr=False)
 class PushableEntity(BaseEntity):
-    pushable: Pushable = Pushable()
+    pushable: Pushable = field(default_factory=Pushable)
 
 
 @dataclass(repr=False)
 class CollectibleEntity(BaseEntity):
-    collectible: Collectible = Collectible()
+    collectible: Collectible = field(default_factory=Collectible)
 
 
 # Entity definitions.
@@ -65,13 +61,17 @@ class CollectibleEntity(BaseEntity):
 
 @dataclass(repr=False)
 class AgentEntity(CollidableEntity):
-    agent: Agent = Agent()
-    appearance: Appearance = Appearance(name="human", priority=0)
-    health: Health = Health(
-        current_health=DEFAULT_AGENT_HEALTH, max_health=DEFAULT_AGENT_HEALTH
+    agent: Agent = field(default_factory=Agent)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="human", priority=0)
     )
-    inventory: Inventory = Inventory(pset())
-    status: Status = Status(pset())
+    health: Health = field(
+        default_factory=lambda: Health(
+            current_health=DEFAULT_AGENT_HEALTH, max_health=DEFAULT_AGENT_HEALTH
+        )
+    )
+    inventory: Inventory = field(default_factory=lambda: Inventory(set()))
+    status: Status = field(default_factory=lambda: Status(set()))
     inventory_list: list[BaseEntity] = field(default_factory=list[BaseEntity])
     status_list: list[BaseEntity] = field(default_factory=list[BaseEntity])
 
@@ -84,81 +84,109 @@ class AgentEntity(CollidableEntity):
 
 
 @dataclass(repr=False)
-class FloorEntity(BaseEntity):
-    appearance: Appearance = Appearance(name="floor", background=True, priority=10)
-    cost: Cost = Cost(amount=FLOOR_COST)
-
-
-@dataclass(repr=False)
 class WallEntity(BlockingEntity):
-    appearance: Appearance = Appearance(name="wall", background=True, priority=9)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="wall", background=True, priority=9)
+    )
 
 
 @dataclass(repr=False)
 class ExitEntity(BaseEntity):
-    appearance: Appearance = Appearance(name="exit", priority=9)
-    exit: Exit = Exit()
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="exit", priority=9)
+    )
+    exit: Exit = field(default_factory=Exit)
 
 
 @dataclass(repr=False)
 class CoinEntity(CollectibleEntity):
-    appearance: Appearance = Appearance(name="coin", icon=True, priority=4)
-    rewardable: Rewardable = Rewardable(amount=COIN_REWARD)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="coin", icon=True, priority=4)
+    )
+    rewardable: Rewardable = field(
+        default_factory=lambda: Rewardable(amount=COIN_REWARD)
+    )
 
 
 @dataclass(repr=False)
 class GemEntity(CollectibleEntity):
-    appearance: Appearance = Appearance(name="gem", icon=True, priority=4)
-    requirable: Requirable = Requirable()
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="gem", icon=True, priority=4)
+    )
+    requirable: Requirable = field(default_factory=Requirable)
 
 
 @dataclass(repr=False)
 class KeyEntity(CollectibleEntity):
-    appearance: Appearance = Appearance(name="key", icon=True, priority=4)
-    key: Key = Key(key_id=KEY_DOOR_ID)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="key", icon=True, priority=4)
+    )
+    key: Key = field(default_factory=lambda: Key(key_id=KEY_DOOR_ID))
 
 
 @dataclass(repr=False)
 class LockedDoorEntity(BlockingEntity):
-    appearance: Appearance = Appearance(name="door", priority=6)
-    locked: Locked = Locked(key_id=KEY_DOOR_ID)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="door", priority=6)
+    )
+    locked: Locked = field(default_factory=lambda: Locked(key_id=KEY_DOOR_ID))
 
 
 @dataclass(repr=False)
 class UnlockedDoorEntity(BaseEntity):
-    appearance: Appearance = Appearance(name="door", priority=6)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="door", priority=6)
+    )
 
 
 @dataclass(repr=False)
 class BoxEntity(BlockingEntity, PushableEntity):
-    appearance: Appearance = Appearance(name="box", priority=2)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="box", priority=2)
+    )
 
 
 @dataclass(repr=False)
 class LavaEntity(CollidableEntity):
-    appearance: Appearance = Appearance(name="lava", priority=7)
-    damage: Damage = Damage(amount=HAZARD_DAMAGE)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="lava", priority=7)
+    )
+    damage: Damage = field(default_factory=lambda: Damage(amount=HAZARD_DAMAGE))
 
 
 @dataclass(repr=False)
 class SpeedPowerUpEntity(CollectibleEntity):
-    appearance: Appearance = Appearance(name="boots", icon=True, priority=4)
-    speed: Speed = Speed(multiplier=SPEED_POWERUP_MULTIPLIER)
-    time_limit: TimeLimit = TimeLimit(amount=SPEED_POWERUP_DURATION)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="boots", icon=True, priority=4)
+    )
+    speed: Speed = field(
+        default_factory=lambda: Speed(multiplier=SPEED_POWERUP_MULTIPLIER)
+    )
+    time_limit: TimeLimit = field(
+        default_factory=lambda: TimeLimit(amount=SPEED_POWERUP_DURATION)
+    )
 
 
 @dataclass(repr=False)
 class ShieldPowerUpEntity(CollectibleEntity):
-    appearance: Appearance = Appearance(name="shield", icon=True, priority=4)
-    immunity: Immunity = Immunity()
-    usage_limit: UsageLimit = UsageLimit(amount=SHIELD_POWERUP_USAGE)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="shield", icon=True, priority=4)
+    )
+    immunity: Immunity = field(default_factory=Immunity)
+    usage_limit: UsageLimit = field(
+        default_factory=lambda: UsageLimit(amount=SHIELD_POWERUP_USAGE)
+    )
 
 
 @dataclass(repr=False)
 class PhasingPowerUpEntity(CollectibleEntity):
-    appearance: Appearance = Appearance(name="ghost", icon=True, priority=4)
-    phasing: Phasing = Phasing()
-    time_limit: TimeLimit = TimeLimit(amount=PHASING_POWERUP_DURATION)
+    appearance: Appearance = field(
+        default_factory=lambda: Appearance(name="ghost", icon=True, priority=4)
+    )
+    phasing: Phasing = field(default_factory=Phasing)
+    time_limit: TimeLimit = field(
+        default_factory=lambda: TimeLimit(amount=PHASING_POWERUP_DURATION)
+    )
 
 
 # Helper functions to create entities with specific configurations.

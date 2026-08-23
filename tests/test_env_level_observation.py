@@ -1,7 +1,8 @@
+from grid_universe.grid.convert import grid_state_fn_to_initial_state_fn
+from grid_universe.grid.gridstate import GridState
+
 from grid_adventure.env import GridAdventureEnv
 from grid_adventure.levels import intro
-from grid_universe.grid.gridstate import GridState
-from grid_universe.grid.convert import grid_state_fn_to_initial_state_fn
 
 
 def test_env_returns_level_observation():
