@@ -1,47 +1,45 @@
-from grid_universe.grid.gridstate import GridState
+from grid_universe.components.properties.appearance import Appearance
 from grid_universe.grid.convert import to_state
+from grid_universe.grid.entity import Entity
 from grid_universe.grid.factories import (
     create_agent,
-    create_floor,
-    create_wall,
-    create_exit,
+    create_box,
     create_coin,
     create_core,
-    create_key,
     create_door,
-    create_portal,
-    create_box,
-    create_monster,
+    create_exit,
     create_hazard,
-    create_speed_effect,
     create_immunity_effect,
+    create_key,
+    create_monster,
     create_phasing_effect,
+    create_portal,
+    create_speed_effect,
+    create_wall,
 )
-from grid_universe.components.properties.appearance import Appearance
-from grid_universe.grid.entity import Entity
+from grid_universe.grid.gridstate import GridState
 from grid_universe.movements import BaseMovement
 from grid_universe.objectives import BaseObjective
 
-from grid_adventure.grid import specialize_entities, from_state
 from grid_adventure.entities import (
     AgentEntity,
-    FloorEntity,
-    WallEntity,
-    ExitEntity,
+    BoxEntity,
     CoinEntity,
+    ExitEntity,
     GemEntity,
     KeyEntity,
-    LockedDoorEntity,
-    UnlockedDoorEntity,
-    PortalEntity,
-    BoxEntity,
-    MovingBoxEntity,
-    RobotEntity,
     LavaEntity,
-    SpeedPowerUpEntity,
-    ShieldPowerUpEntity,
+    LockedDoorEntity,
+    MovingBoxEntity,
     PhasingPowerUpEntity,
+    PortalEntity,
+    RobotEntity,
+    ShieldPowerUpEntity,
+    SpeedPowerUpEntity,
+    UnlockedDoorEntity,
+    WallEntity,
 )
+from grid_adventure.grid import from_state, specialize_entities
 
 
 def _flatten(gridstate: GridState):
@@ -61,21 +59,20 @@ def test_specialize_every_entity_type():
             name="test", description="Test", function=lambda s, e, a: []
         ),
         objective=BaseObjective(
-            name="test", description="Test", functions=(lambda s, e: False,)
+            name="test", description="Test", functions=(lambda s, e, ctx: False,)
         ),
         seed=123,
     )
 
     coords = {
         "agent": (0, 0),
-        "floor": (1, 0),
-        "wall": (2, 0),
-        "exit": (3, 0),
-        "coin": (4, 0),
-        "core": (5, 0),
-        "key": (6, 0),
-        "locked_door": (7, 0),
-        "unlocked_door": (8, 0),
+        "wall": (1, 0),
+        "exit": (2, 0),
+        "coin": (3, 0),
+        "core": (4, 0),
+        "key": (5, 0),
+        "locked_door": (6, 0),
+        "unlocked_door": (7, 0),
         "portal_a": (0, 1),
         "portal_b": (1, 1),
         "box": (2, 1),
@@ -91,7 +88,6 @@ def test_specialize_every_entity_type():
     agent = create_agent()
     agent.inventory_list = [create_key(key_id="INV"), create_core(required=True)]
     gridstate.add(coords["agent"], agent)
-    gridstate.add(coords["floor"], create_floor())
     gridstate.add(coords["wall"], create_wall())
     gridstate.add(coords["exit"], create_exit())
     gridstate.add(coords["coin"], create_coin())
@@ -143,7 +139,6 @@ def test_specialize_every_entity_type():
 
     # Coordinate checks (each at the expected cell)
     assert_at(coords["agent"], AgentEntity)
-    assert_at(coords["floor"], FloorEntity)
     assert_at(coords["wall"], WallEntity)
     assert_at(coords["exit"], ExitEntity)
     assert_at(coords["coin"], CoinEntity)
@@ -165,7 +160,6 @@ def test_specialize_every_entity_type():
     # Presence counts (aggregate)
     counts = {
         "AgentEntity": 0,
-        "FloorEntity": 0,
         "WallEntity": 0,
         "ExitEntity": 0,
         "CoinEntity": 0,
@@ -189,7 +183,6 @@ def test_specialize_every_entity_type():
 
     # Exactly one of each, except portals (2)
     assert counts["AgentEntity"] == 1
-    assert counts["FloorEntity"] == 1
     assert counts["WallEntity"] == 1
     assert counts["ExitEntity"] == 1
     assert counts["CoinEntity"] == 1
@@ -212,7 +205,7 @@ def test_specialize_every_entity_type():
         obj for _, _, obj in _flatten(specialized) if isinstance(obj, MovingBoxEntity)
     )
     box = next(obj for _, _, obj in _flatten(specialized) if isinstance(obj, BoxEntity))
-    assert getattr(moving_box, "moving") is not None
+    assert moving_box.moving is not None
     assert getattr(box, "moving", None) is None
 
     # Monster/Lava have damage components
@@ -222,8 +215,8 @@ def test_specialize_every_entity_type():
     lava = next(
         obj for _, _, obj in _flatten(specialized) if isinstance(obj, LavaEntity)
     )
-    assert getattr(monster, "damage") is not None
-    assert getattr(lava, "damage") is not None
+    assert monster.damage is not None
+    assert lava.damage is not None
 
     # Power-ups carry correct effect components
     speed = next(
@@ -241,9 +234,9 @@ def test_specialize_every_entity_type():
         for _, _, obj in _flatten(specialized)
         if isinstance(obj, PhasingPowerUpEntity)
     )
-    assert getattr(speed, "speed") is not None
-    assert getattr(shield, "immunity") is not None
-    assert getattr(phasing, "phasing") is not None
+    assert speed.speed is not None
+    assert shield.immunity is not None
+    assert phasing.phasing is not None
 
     # Door semantics
     locked_door = next(
@@ -254,7 +247,7 @@ def test_specialize_every_entity_type():
         for _, _, obj in _flatten(specialized)
         if isinstance(obj, UnlockedDoorEntity)
     )
-    assert getattr(locked_door, "locked") is not None
+    assert locked_door.locked is not None
     assert getattr(unlocked_door, "locked", None) is None
 
     # Coin vs Gem semantics
@@ -262,15 +255,15 @@ def test_specialize_every_entity_type():
         obj for _, _, obj in _flatten(specialized) if isinstance(obj, CoinEntity)
     )
     gem = next(obj for _, _, obj in _flatten(specialized) if isinstance(obj, GemEntity))
-    assert getattr(coin, "rewardable") is not None
-    assert getattr(gem, "requirable") is not None
+    assert coin.rewardable is not None
+    assert gem.requirable is not None
 
     # Agent inventory/status components
     agent = next(
         obj for _, _, obj in _flatten(specialized) if isinstance(obj, AgentEntity)
     )
-    assert getattr(agent, "inventory") is not None
-    assert getattr(agent, "status") is not None
+    assert agent.inventory is not None
+    assert agent.status is not None
     assert hasattr(agent, "inventory_list")
     inv_list = getattr(agent, "inventory_list", [])
     assert len(inv_list) == 2
@@ -288,21 +281,20 @@ def test_specialize_roundtrip_preserves_types_and_coordinates():
             name="test", description="Test", function=lambda s, e, a: []
         ),
         objective=BaseObjective(
-            name="test", description="Test", functions=(lambda s, e: False,)
+            name="test", description="Test", functions=(lambda s, e, ctx: False,)
         ),
         seed=456,
     )
 
     coords = {
         "agent": (0, 0),
-        "floor": (1, 0),
-        "wall": (2, 0),
-        "exit": (3, 0),
-        "coin": (4, 0),
-        "core": (5, 0),
-        "key": (6, 0),
-        "locked_door": (7, 0),
-        "unlocked_door": (8, 0),
+        "wall": (1, 0),
+        "exit": (2, 0),
+        "coin": (3, 0),
+        "core": (4, 0),
+        "key": (5, 0),
+        "locked_door": (6, 0),
+        "unlocked_door": (7, 0),
         "portal_a": (0, 1),
         "portal_b": (1, 1),
         "box": (2, 1),
@@ -318,7 +310,6 @@ def test_specialize_roundtrip_preserves_types_and_coordinates():
     agent = create_agent()
     agent.inventory_list = [create_key(key_id="INV"), create_core(required=True)]
     gridstate.add(coords["agent"], agent)
-    gridstate.add(coords["floor"], create_floor())
     gridstate.add(coords["wall"], create_wall())
     gridstate.add(coords["exit"], create_exit())
     gridstate.add(coords["coin"], create_coin())
@@ -362,7 +353,6 @@ def test_specialize_roundtrip_preserves_types_and_coordinates():
     # Expected types per coordinate after roundtrip
     expected = {
         coords["agent"]: {"AgentEntity"},
-        coords["floor"]: {"FloorEntity"},
         coords["wall"]: {"WallEntity"},
         coords["exit"]: {"ExitEntity"},
         coords["coin"]: {"CoinEntity"},
@@ -411,7 +401,7 @@ def test_specialize_roundtrip_preserves_types_and_coordinates():
         for obj in cell
         if isinstance(obj, BoxEntity)
     )
-    assert getattr(moving_box, "moving") is not None
+    assert moving_box.moving is not None
     assert getattr(box, "moving", None) is None
 
     # Agent inventory/status components survive roundtrip
@@ -422,8 +412,8 @@ def test_specialize_roundtrip_preserves_types_and_coordinates():
         for obj in cell
         if isinstance(obj, AgentEntity)
     )
-    assert getattr(agent, "inventory") is not None
-    assert getattr(agent, "status") is not None
+    assert agent.inventory is not None
+    assert agent.status is not None
     assert hasattr(agent, "inventory_list")
     inv_list = getattr(agent, "inventory_list", [])
     assert len(inv_list) == 2

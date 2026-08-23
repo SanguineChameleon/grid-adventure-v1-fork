@@ -1,9 +1,10 @@
+from grid_universe.actions import Action
+from grid_universe.components.properties import Position
+from grid_universe.grid.convert import to_state
 from grid_universe.state import State
 from grid_universe.types import EntityID
-from grid_universe.actions import Action
-from grid_universe.grid.convert import to_state
 from grid_universe.utils.ecs import entities_with_components_at
-from grid_universe.components.properties import Position
+
 from grid_adventure.levels import intro
 from grid_adventure.step import step as adv_step
 

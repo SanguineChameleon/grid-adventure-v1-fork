@@ -1,37 +1,35 @@
 from __future__ import annotations
 
-from grid_universe.state import State
-from grid_universe.grid.gridstate import GridState
+from grid_universe.actions import Action
 from grid_universe.grid.convert import from_state as base_from_state
 from grid_universe.grid.convert import to_state as base_to_state
 from grid_universe.grid.entity import BaseEntity, copy_entity_components
+from grid_universe.grid.gridstate import GridState
 from grid_universe.grid.step import step as base_step
-from grid_universe.actions import Action
+from grid_universe.state import State
 
 # Specialized entity classes from Grid Adventure
 from grid_adventure.entities import (
     AgentEntity,
-    FloorEntity,
-    WallEntity,
-    ExitEntity,
+    BoxEntity,
     CoinEntity,
+    ExitEntity,
     GemEntity,
     KeyEntity,
-    LockedDoorEntity,
-    UnlockedDoorEntity,
-    PortalEntity,
-    BoxEntity,
-    MovingBoxEntity,
-    RobotEntity,
     LavaEntity,
-    SpeedPowerUpEntity,
-    ShieldPowerUpEntity,
+    LockedDoorEntity,
+    MovingBoxEntity,
     PhasingPowerUpEntity,
+    PortalEntity,
+    RobotEntity,
+    ShieldPowerUpEntity,
+    SpeedPowerUpEntity,
+    UnlockedDoorEntity,
+    WallEntity,
 )
 
 SpecializedTypes = (
     AgentEntity,
-    FloorEntity,
     WallEntity,
     ExitEntity,
     CoinEntity,
@@ -120,9 +118,6 @@ def _specialize_single(obj: BaseEntity) -> BaseEntity:
     if app_name == "monster" or app_name == "robot":
         return copy_entity_components(obj, RobotEntity(), preserve_entity_id=True)
 
-    # Background tiles
-    if app_name == "floor":
-        return copy_entity_components(obj, FloorEntity(), preserve_entity_id=True)
     if app_name == "wall":
         return copy_entity_components(obj, WallEntity(), preserve_entity_id=True)
 
@@ -148,6 +143,7 @@ def specialize_entities(gridstate: GridState) -> GridState:
         movement=gridstate.movement,
         objective=gridstate.objective,
         seed=gridstate.seed,
+        step_cost=gridstate.step_cost,
         turn=gridstate.turn,
         score=gridstate.score,
         win=gridstate.win,
@@ -168,17 +164,11 @@ def specialize_entities(gridstate: GridState) -> GridState:
                 if hasattr(spec_obj, "inventory_list"):
                     inv_list = getattr(spec_obj, "inventory_list", None)
                     if inv_list:
-                        setattr(
-                            spec_obj,
-                            "inventory_list",
-                            _specialize_nested_list(inv_list),
-                        )
+                        spec_obj.inventory_list = _specialize_nested_list(inv_list)
                 if hasattr(spec_obj, "status_list"):
                     st_list = getattr(spec_obj, "status_list", None)
                     if st_list:
-                        setattr(
-                            spec_obj, "status_list", _specialize_nested_list(st_list)
-                        )
+                        spec_obj.status_list = _specialize_nested_list(st_list)
 
                 obj_map[id(orig_obj)] = spec_obj
                 specialized_cell.append(spec_obj)
@@ -195,16 +185,16 @@ def specialize_entities(gridstate: GridState) -> GridState:
                     if old_ref is not None:
                         new_ref = obj_map.get(id(old_ref))
                         if new_ref is not None:
-                            setattr(spec_obj, "pathfind_target_ref", new_ref)
+                            spec_obj.pathfind_target_ref = new_ref
                 # portal_pair_ref (ensure bidirectional)
-                if hasattr(spec_obj, "portal_pair_ref"):
-                    old_mate = getattr(spec_obj, "portal_pair_ref", None)
+                if isinstance(spec_obj, PortalEntity):
+                    old_mate = spec_obj.portal_pair_ref
                     if old_mate is not None:
                         new_mate = obj_map.get(id(old_mate))
-                        if new_mate is not None:
-                            setattr(spec_obj, "portal_pair_ref", new_mate)
-                            if getattr(new_mate, "portal_pair_ref", None) is None:
-                                setattr(new_mate, "portal_pair_ref", spec_obj)
+                        if isinstance(new_mate, PortalEntity):
+                            spec_obj.portal_pair_ref = new_mate
+                            if new_mate.portal_pair_ref is None:
+                                new_mate.portal_pair_ref = spec_obj
 
     return new_grid_state
 
@@ -225,4 +215,4 @@ def step(gridstate: GridState, action: Action) -> GridState:
     return specialize_entities(base_step(gridstate, action))
 
 
-__all__ = ["from_state", "to_state", "specialize_entities", "step", "GridState"]
+__all__ = ["GridState", "from_state", "specialize_entities", "step", "to_state"]

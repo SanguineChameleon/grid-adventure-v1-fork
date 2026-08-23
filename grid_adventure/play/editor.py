@@ -4,37 +4,34 @@ from collections.abc import Callable
 from typing import Any
 
 import streamlit as st
-
-from grid_universe.state import State
-from grid_universe.renderer.image import ImageMap
-
-from grid_adventure.env import GridAdventureEnv
-from grid_adventure.objectives import OBJECTIVES
-from grid_adventure.movements import MOVEMENTS
-from grid_adventure.rendering import IMAGE_MAP, DEFAULT_ASSET_ROOT
-from grid_adventure.entities import (
-    FloorEntity,
-    WallEntity,
-    ExitEntity,
-    CoinEntity,
-    GemEntity,
-    KeyEntity,
-    LockedDoorEntity,
-    UnlockedDoorEntity,
-    BoxEntity,
-    LavaEntity,
-    SpeedPowerUpEntity,
-    ShieldPowerUpEntity,
-    PhasingPowerUpEntity,
-    create_agent_entity,
-    create_robot_entity,
-    create_moving_box_entity,
-    create_portal_entity,
-)
-
 from grid_play.config.sources.base import register_level_source
 from grid_play.config.sources.level_editor import ToolSpec, make_level_editor_source
+from grid_universe.renderer.image import ImageMap
+from grid_universe.state import State
 
+from grid_adventure.constants import STEP_COST
+from grid_adventure.entities import (
+    BoxEntity,
+    CoinEntity,
+    ExitEntity,
+    GemEntity,
+    KeyEntity,
+    LavaEntity,
+    LockedDoorEntity,
+    PhasingPowerUpEntity,
+    ShieldPowerUpEntity,
+    SpeedPowerUpEntity,
+    UnlockedDoorEntity,
+    WallEntity,
+    create_agent_entity,
+    create_moving_box_entity,
+    create_portal_entity,
+    create_robot_entity,
+)
+from grid_adventure.env import GridAdventureEnv
+from grid_adventure.movements import MOVEMENTS
+from grid_adventure.objectives import OBJECTIVES
+from grid_adventure.rendering import DEFAULT_ASSET_ROOT, IMAGE_MAP
 
 # -----------------------
 # Parameter UIs
@@ -63,12 +60,6 @@ def direction_params(prefix: str) -> dict[str, Any]:
 # -----------------------
 
 PALETTE: dict[str, ToolSpec] = {
-    "floor": ToolSpec(
-        label="Floor",
-        icon="⬜",
-        factory_fn=FloorEntity,
-        param_map=lambda p: {},
-    ),
     "wall": ToolSpec(
         label="Wall",
         icon="🟫",
@@ -172,9 +163,9 @@ PALETTE: dict[str, ToolSpec] = {
     "erase": ToolSpec(
         label="Eraser",
         icon="␡",
-        factory_fn=FloorEntity,
+        factory_fn=None,
         param_map=lambda p: {},
-        description="Reset cell to floor-only.",
+        description="Reset cell.",
     ),
 }
 
@@ -214,6 +205,7 @@ register_level_source(
         movement_registry=MOVEMENTS,
         objective_registry=OBJECTIVES,
         asset_root_resolver=_asset_root_resolver,
+        step_cost=STEP_COST,
         gridstate_import_line="from grid_adventure.grid import GridState",
         movements_import_line="from grid_adventure.movements import MOVEMENTS",
         objectives_import_line="from grid_adventure.objectives import OBJECTIVES",

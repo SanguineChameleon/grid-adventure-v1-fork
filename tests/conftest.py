@@ -1,13 +1,14 @@
+from collections.abc import Callable, Iterator
 from pathlib import Path
-import pytest
-from typing import Iterator, Callable
-from PIL import Image
 
-from grid_universe.grid.convert import to_state, grid_state_fn_to_initial_state_fn
+import pytest
+from grid_universe.grid.convert import grid_state_fn_to_initial_state_fn, to_state
 from grid_universe.grid.gridstate import GridState
 from grid_universe.state import State
-from grid_adventure.levels import intro
+from PIL import Image
+
 from grid_adventure.env import GridAdventureEnv
+from grid_adventure.levels import intro
 
 
 @pytest.fixture(scope="session")

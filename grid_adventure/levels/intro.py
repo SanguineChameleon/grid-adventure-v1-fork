@@ -1,33 +1,27 @@
 from grid_universe.grid.gridstate import GridState
-from grid_adventure.movements import MOVEMENTS
-from grid_adventure.objectives import OBJECTIVES
+
+from grid_adventure.constants import STEP_COST
 from grid_adventure.entities import (
-    create_agent_entity,
-    FloorEntity,
-    WallEntity,
-    ExitEntity,
+    BoxEntity,
     CoinEntity,
+    ExitEntity,
     GemEntity,
     KeyEntity,
-    LockedDoorEntity,
     LavaEntity,
-    create_portal_entity,
-    BoxEntity,
-    create_moving_box_entity,
-    create_robot_entity,
-    SpeedPowerUpEntity,
-    ShieldPowerUpEntity,
+    LockedDoorEntity,
     PhasingPowerUpEntity,
+    ShieldPowerUpEntity,
+    SpeedPowerUpEntity,
+    WallEntity,
+    create_agent_entity,
+    create_moving_box_entity,
+    create_portal_entity,
+    create_robot_entity,
 )
-
+from grid_adventure.movements import MOVEMENTS
+from grid_adventure.objectives import OBJECTIVES
 
 TURN_LIMIT = 50
-
-
-def _floors(gridstate: GridState) -> None:
-    for y in range(gridstate.height):
-        for x in range(gridstate.width):
-            gridstate.add((x, y), FloorEntity())
 
 
 def _border(gridstate: GridState) -> None:
@@ -47,9 +41,9 @@ def build_level_basic_movement(seed: int = 100) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     gridstate.add((1, h // 2), create_agent_entity())
     gridstate.add((w - 2, h // 2), ExitEntity())
     for y in range(h):
@@ -66,9 +60,9 @@ def build_level_maze_turns(seed: int = 101) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     _border(gridstate)
     for x in range(2, w - 2):
         gridstate.add((x, 2), WallEntity())
@@ -88,9 +82,9 @@ def build_level_optional_coin(seed: int = 102) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     _border(gridstate)
     gridstate.add((1, 2), WallEntity())
     gridstate.add((3, 3), WallEntity())
@@ -114,9 +108,9 @@ def build_level_required_one(seed: int = 103) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     _border(gridstate)
     for y in range(1, h - 1):
         if y != h // 2:
@@ -135,9 +129,9 @@ def build_level_required_two(seed: int = 104) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     _border(gridstate)
     midx, midy = w // 2, h // 2
     for x in range(1, w - 1):
@@ -159,9 +153,9 @@ def build_level_key_door(seed: int = 105) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     for y in range(h):
         if y != h // 2:
             gridstate.add((w // 2, y), WallEntity())
@@ -180,9 +174,9 @@ def build_level_hazard_detour(seed: int = 106) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     gridstate.add((1, h // 2), create_agent_entity())
     gridstate.add((w - 2, h // 2), ExitEntity())
     gridstate.add((w // 2 - 1, h // 2), LavaEntity())
@@ -200,9 +194,9 @@ def build_level_portal_shortcut(seed: int = 107) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     gridstate.add((1, h // 2), create_agent_entity())
     gridstate.add((w - 2, h // 2), ExitEntity())
     p1 = create_portal_entity()
@@ -222,9 +216,9 @@ def build_level_pushable_box(seed: int = 108) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     for y in range(h):
         if y != h // 2:
             gridstate.add((w // 2, y), WallEntity())
@@ -242,9 +236,9 @@ def build_level_moving_box(seed: int = 108) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     for y in range(h):
         if y not in [h // 2, h // 2 + 1]:
             gridstate.add((w // 2, y), WallEntity())
@@ -262,9 +256,9 @@ def build_level_enemy_patrol(seed: int = 109) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     gridstate.add((2, h // 2), create_agent_entity(1))
     gridstate.add((w - 2, h // 2), ExitEntity())
     for y in range(h):
@@ -286,9 +280,9 @@ def build_level_power_shield(seed: int = 110) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     gridstate.add((1, h // 2), create_agent_entity(2))
     gridstate.add((w - 2, h // 2), ExitEntity())
     for y in range(h):
@@ -307,9 +301,9 @@ def build_level_power_ghost(seed: int = 111) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     gridstate.add((1, h // 2), create_agent_entity())
     gridstate.add((w - 2, h // 2), ExitEntity())
     for y in range(h):
@@ -328,9 +322,9 @@ def build_level_power_boots(seed: int = 112) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-    _floors(gridstate)
     gridstate.add((1, h // 2), create_agent_entity(1))
     gridstate.add((w - 2, h // 2), ExitEntity())
     for y in range(h):
@@ -355,10 +349,9 @@ def build_level_capstone(seed: int = 113) -> GridState:
         movement=MOVEMENTS["cardinal"],
         objective=OBJECTIVES["collect_gems_and_exit"],
         seed=seed,
+        step_cost=STEP_COST,
         turn_limit=TURN_LIMIT,
     )
-
-    _floors(gridstate)
 
     # Agent
     gridstate.add((0, 0), create_agent_entity())

@@ -1,4 +1,4 @@
-from grid_universe.components.properties.moving import Direction, CollisionBehavior
+from grid_universe.components.properties.moving import CollisionBehavior, Direction
 
 # Default settings
 DEFAULT_AGENT_HEALTH = 5
@@ -11,7 +11,7 @@ ENTITY_MOVE_ON_COLLISION: CollisionBehavior = "bounce"
 
 # Reward and cost values
 COIN_REWARD = 5
-FLOOR_COST = 3
+STEP_COST = 3
 
 # Damage values
 HAZARD_DAMAGE = 2

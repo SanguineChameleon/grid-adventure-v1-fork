@@ -1,8 +1,9 @@
 import os
 from pathlib import Path
 from typing import Any
-from grid_universe.renderer.image import ImageMap, ImageRenderer as BaseImageRenderer
 
+from grid_universe.renderer.image import ImageMap
+from grid_universe.renderer.image import ImageRenderer as BaseImageRenderer
 
 # Default asset root directory.
 DEFAULT_ASSET_ROOT = os.path.join(Path(__file__).parent.resolve(), "assets")
@@ -10,24 +11,24 @@ DEFAULT_ASSET_ROOT = os.path.join(Path(__file__).parent.resolve(), "assets")
 # Mapping from (appearance name, properties) to image file/directory names.
 IMAGE_MAP: ImageMap = ImageMap(
     {
-        ("human", tuple([])): "human",
-        ("human", tuple(["dead"])): "sleeping",
-        ("coin", tuple([])): "coin",
-        ("gem", tuple(["requirable"])): "gem",
-        ("metalbox", tuple([])): "metalbox",
-        ("box", tuple(["pushable"])): "box",
-        ("robot", tuple([])): "robot",
-        ("key", tuple([])): "key",
-        ("portal", tuple([])): "portal",
-        ("door", tuple(["locked"])): "locked",
-        ("door", tuple([])): "opened",
-        ("shield", tuple(["immunity"])): "shield",
-        ("ghost", tuple(["phasing"])): "ghost",
-        ("boots", tuple(["speed"])): "boots",
-        ("lava", tuple([])): "lava",
-        ("exit", tuple([])): "exit",
-        ("wall", tuple([])): "wall",
-        ("floor", tuple([])): "floor",
+        ("human", ()): "human",
+        ("human", ("dead",)): "sleeping",
+        ("coin", ()): "coin",
+        ("gem", ("requirable",)): "gem",
+        ("metalbox", ()): "metalbox",
+        ("box", ("pushable",)): "box",
+        ("robot", ()): "robot",
+        ("key", ()): "key",
+        ("portal", ()): "portal",
+        ("door", ("locked",)): "locked",
+        ("door", ()): "opened",
+        ("shield", ("immunity",)): "shield",
+        ("ghost", ("phasing",)): "ghost",
+        ("boots", ("speed",)): "boots",
+        ("lava", ()): "lava",
+        ("exit", ()): "exit",
+        ("wall", ()): "wall",
+        ("floor", ()): "floor",
     }
 )
 

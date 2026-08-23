@@ -1,10 +1,12 @@
-from typing import Callable
+from collections.abc import Callable
+
 import numpy as np
+from grid_universe.actions import Action
+from grid_universe.grid.convert import grid_state_fn_to_initial_state_fn
+from grid_universe.renderer.image import ImageMap
+
 from grid_adventure.env import GridAdventureEnv
 from grid_adventure.levels import intro
-from grid_universe.grid.convert import grid_state_fn_to_initial_state_fn
-from grid_universe.actions import Action
-from grid_universe.renderer.image import ImageMap
 
 
 def test_env_image_observation_with_temp_assets(
@@ -24,10 +26,10 @@ def test_env_image_observation_with_temp_assets(
         render_asset_root=asset_root,
         render_image_map=ImageMap(
             {
-                ("human", tuple([])): "human.png",
-                ("floor", tuple([])): "floor.png",
-                ("wall", tuple([])): "wall.png",
-                ("exit", tuple([])): "exit.png",
+                ("human", ()): "human.png",
+                ("floor", ()): "floor.png",
+                ("wall", ()): "wall.png",
+                ("exit", ()): "exit.png",
             }
         ),
         render_resolution=128,
@@ -38,6 +40,6 @@ def test_env_image_observation_with_temp_assets(
     assert isinstance(img, np.ndarray)
     assert img.ndim == 3 and img.shape[2] == 4  # RGBA
     # Step and confirm image still valid
-    obs2, reward, terminated, truncated, info2 = env.step(Action.WAIT)
+    obs2, _, _, _, _ = env.step(Action.WAIT)
     assert obs2["image"].shape == obs["image"].shape
     env.close()

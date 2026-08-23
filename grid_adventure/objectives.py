@@ -1,6 +1,7 @@
 """Objective functions for Grid Adventure environments."""
 
 from dataclasses import dataclass
+
 from grid_universe.objectives import CollectAndExitObjective
 
 

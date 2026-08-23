@@ -2,18 +2,17 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from grid_universe.state import State
-from grid_universe.renderer.image import ImageMap
-
-from grid_adventure.env import GridAdventureEnv
-from grid_adventure.rendering import IMAGE_MAP
-from grid_adventure.levels import intro as adv_intro_levels
-
+from grid_play.config.sources.base import register_level_source
 from grid_play.config.sources.level_selection import (
     Builder,
     make_level_selection_source,
 )
-from grid_play.config.sources.base import register_level_source
+from grid_universe.renderer.image import ImageMap
+from grid_universe.state import State
+
+from grid_adventure.env import GridAdventureEnv
+from grid_adventure.levels import intro as adv_intro_levels
+from grid_adventure.rendering import IMAGE_MAP
 
 BUILDERS: dict[str, Builder] = {
     "A0 Basic Movement": adv_intro_levels.build_level_basic_movement,
