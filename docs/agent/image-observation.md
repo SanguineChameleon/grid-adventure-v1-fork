@@ -123,20 +123,14 @@ An example of a rendered grid is shown below.
 
 ### Overlapping rules
 
-#### Initial state
-
 - At the start of the game, **entities do not overlap**.
-- The only exception is **Floor**, which may exist beneath any entity.
-
-#### During gameplay
-
-Overlaps may occur when the agent moves onto a tile containing other entities.
+- During the gameplay, overlaps may occur when the agent moves onto a tile containing other entities.
 
 ### Overlapping entities
 
 #### Agent with collectible items
 
-When the agent occupies the same cell as a collectible item:
+When the agent occupies the same cell as a collectible item (`Coin`, `Key`, `Gem`):
 
 - The agent is rendered normally.
 - The collectible item is **shrunk** and displayed in the **top-left corner** of the cell.
@@ -145,9 +139,7 @@ When the agent occupies the same cell as a collectible item:
 
 #### Agent with background entities
 
-`Floor`, `Lava`, `Exit`, and `UnlockedDoor` are background entities.
-
-When the agent occupies the same cell as a background entity:
+When the agent occupies the same cell as a background entity (`Floor`, `Lava`, `Exit`, and `UnlockedDoor`):
 
 - The background entity remains visible.
 - The agent is rendered **in front** of it.

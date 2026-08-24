@@ -26,7 +26,7 @@ class Agent:
         return Action.WAIT
 ```
 
-## Initialization — `__init__`
+## Initialization - `__init__`
 
 > `__init__(self, *args, **kwargs) -> None`
 
@@ -34,17 +34,17 @@ Runs once when the agent is instantiated.
 
 **Tip:** use it to declare any internal variables your agent needs (for example, a plan, a map it builds up, or counters).
 
-## Step — `step`
+## Step - `step`
 
 > `step(self, obs: GridState | ImageObservation) -> Action`
 
 Invoked every turn in the main agent–environment loop. This is the "brain" of your agent: it inspects the current [observation](observations.md) and decides which [Action](../game/actions-and-movement.md) to return.
 
-## Parse — `parse` (optional)
+## Parse - `parse` (optional)
 
 > `parse(self, obs: ImageObservation) -> GridState`
 
-If implemented, Grid Play calls it every step to render what your agent currently sees — the [GridState](gridstate.md) your agent reconstructs from an [ImageObservation](image-observation.md). This lets you spot and correct errors in how your agent interprets the image.
+If implemented, Grid Play calls it every step to render what your agent currently sees - the [GridState](gridstate.md) your agent reconstructs from an [ImageObservation](image-observation.md). This lets you spot and correct errors in how your agent interprets the image.
 
 Your agent's vision appears in the bottom-right corner of the screen.
 
@@ -52,7 +52,7 @@ Your agent's vision appears in the bottom-right corner of the screen.
 
 In this example, the actual grid is in the blue square and the agent's vision is in the red square. Here we can see that the agent mistakenly believes there is a box in the grid.
 
-## Info — `info` (optional)
+## Info - `info` (optional)
 
 > `info(self) -> dict[str, Any]`
 

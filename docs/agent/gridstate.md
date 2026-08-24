@@ -1,6 +1,6 @@
 # GridState
 
-The `GridState` representation is grid-centric and the easiest for players to follow. It is the recommended starting point for most agents.
+The `GridState` representation is grid-centric and provides methods that you can use to directly manipulate the grid. It is the recommended starting point for most agents.
 
 ## Attributes
 

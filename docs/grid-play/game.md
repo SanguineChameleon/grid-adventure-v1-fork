@@ -1,6 +1,6 @@
 # Game Tab
 
-The Game tab is where you play and interact with levels. It provides real-time visual feedback, player status, and multiple control options — including running your own agent.
+The Game tab is where you play and interact with levels. It provides real-time visual feedback, player status, and multiple control options - including running your own agent.
 
 ![Grid-play-game-tab](../assets/grid-play-game-tab-l.png)
 
@@ -14,7 +14,7 @@ The tab is divided into three columns:
 | Middle | Game view (the current [observation](../agent/observations.md)) |
 | Right | Level info and agent controls |
 
-### Left column — Player status
+### Left column - Player status
 
 Displays your current status:
 
@@ -25,14 +25,14 @@ Displays your current status:
 | **PowerUp Status** | Active temporary effects |
 | **Inventory** | Items you have collected |
 
-### Middle column — Game view
+### Middle column - Game view
 
 The central area shows:
 
-- **Game visualization** — real-time rendering of the grid world
-- **Observation info** — a JSON display of the current observation data
+- **Game visualization** - real-time rendering of the grid world
+- **Observation info** - a JSON display of the current observation data
 
-### Right column — Level info & controls
+### Right column - Level info & controls
 
 Provides context about the current level and how to control the agent:
 

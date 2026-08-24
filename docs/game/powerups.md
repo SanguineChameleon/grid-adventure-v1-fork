@@ -25,14 +25,17 @@ If the agent holds several instances of the same powerup, only one instance is u
 The speed powerup lets the agent move 2 tiles in a single turn. The agent can still be blocked by objects in its path. After the effect expires, the agent returns to moving 1 tile per turn.
 
 - **Limit:** turn limit of 5
-- **Class:** `SpeedPowerUpEntity` · **Appearance name:** `"boots"`
+- **Class:** `SpeedPowerUpEntity`
 
-The example shows the agent's movement once the boots are picked up. Note that walls can still restrict the agent from moving 2 tiles.
+The example shows the agent's movement once the boots are picked up. 
 
-![Speed_Movement](../assets/boots_movement.gif)
+!!! warning "Blocking entities undermine speed boost"
+    Note that walls and locked doors can still restrict the agent from moving 2 tiles if they are on the agent's trajectory.
 
 !!! note "Stacking"
     Even if the agent holds multiple active speed powerups, it is still limited to moving two tiles in a single turn.
+
+![Speed_Movement](../assets/boots_movement.gif)
 
 ## Shield
 
@@ -41,7 +44,7 @@ The example shows the agent's movement once the boots are picked up. Note that w
 The shield protects the agent from damage. One use is consumed each time the agent lands on lava, letting it pass through unharmed.
 
 - **Limit:** usage limit of 5
-- **Class:** `ShieldPowerUpEntity` · **Appearance name:** `"shield"`
+- **Class:** `ShieldPowerUpEntity`
 
 In this example the agent's health is set to 1, so it dies when stepping on lava without a shield:
 
@@ -55,11 +58,16 @@ By collecting the shield powerup, the agent can safely pass through the lava:
 
 ![Phasing](../assets/ghosts.png)
 
-Phasing lets the agent move through objects — walls, doors, and boxes. While it is active, the agent also takes no damage from lava.
+Phasing lets the agent move through objects - walls, doors, and boxes. While it is active, the agent also takes no damage from lava.
 
 - **Limit:** turn limit of 5
-- **Class:** `PhasingPowerUpEntity` · **Appearance name:** `"ghost"`
+- **Class:** `PhasingPowerUpEntity`
 
 The example shows the agent collecting the phasing powerup to pass through walls and reach the exit tile.
+
+!!! warning "Don't trap yourself"
+    The agent might find itself inside a wall when phasing ends. Don't worry; the agent can still move out of the wall, to any adjacent tile that is not blocking. 
+
+    But if the agent is blocked on all four sides, it will be stuck there, forever!
 
 ![Phasing_Movement](../assets/ghost_movement.gif)

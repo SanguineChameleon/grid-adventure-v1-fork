@@ -1,6 +1,6 @@
 # State & Component Reference
 
-!!! warning "Optional — not required for the project"
+!!! warning "Optional - not required for the project"
     This page documents the low-level `State` representation. **The project can be solved without it.** It is included only for lower-level access to the game representation. If you are just getting started, use [GridState](../agent/gridstate.md) or [ImageObservation](../agent/image-observation.md) instead.
 
 The `State` representation is the internal representation used by the Grid Adventure game. It stores information in various attributes, tracked by the `EntityID` of each entity. It is the most comprehensive of the three representations and is used to generate the `GridState` and `ImageObservation` representations.
@@ -112,7 +112,7 @@ This is the entity controlled by the user.
 
 | Attribute | Type | Description |
 |---|---|---|
-| health | Health Class | Health of the agent — its max and current health |
+| health | Health Class | Health of the agent - its max and current health |
 | inventory_list | Inventory Class | List of entities in the agent's inventory |
 | status_list | Status Class | List of entities representing the statuses active on the agent |
 
@@ -230,15 +230,11 @@ Note: The time limit is a constant 5 steps.
 
 ### Other entities
 
-These entities extend directly from `BaseEntity`. They are either non-interactable (purely aesthetic) or, in the case of `ExitEntity` and `FloorEntity`, entities with a special purpose.
+These entities extend directly from `BaseEntity`. 
 
 #### [ExitEntity](../game/entities.md#exit)
 
 The final tile the agent must reach to complete the objective. The exit entity has no other attributes.
-
-#### [FloorEntity](../game/entities.md#floor)
-
-Floor entities are not interactable with the agent.
 
 #### [UnlockedDoorEntity](../game/entities.md#door)
 
@@ -291,9 +287,6 @@ gridstate = GridState(
     objective=OBJECTIVES["collect_gems_and_exit"],
     seed=0,
 )
-for y in range(gridstate.height):
-    for x in range(gridstate.width):
-        gridstate.add((x, y), FloorEntity())
 
 # Add an agent, a box, and an exit to the grid
 gridstate.add((0, 1), AgentEntity())
