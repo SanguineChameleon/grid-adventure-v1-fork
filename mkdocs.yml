@@ -19,7 +19,6 @@ markdown_extensions:
 nav:
   - Start Here: index.md
   - Playing the Game:
-      - Overview: game/overview.md
       - Entities: game/entities.md
       - Actions & Movement: game/actions-and-movement.md
       - Objectives & Rewards: game/objectives-and-rewards.md
