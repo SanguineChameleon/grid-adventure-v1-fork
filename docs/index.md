@@ -55,6 +55,7 @@ Read these sections to learn the details and build your agent:
 - [Objectives & Rewards](game/objectives-and-rewards.md): what you must accomplish to win, and how score works
 - [Powerups & Effects](game/powerups.md): temporary boosts and how their limits work
 - [Building Your Agent](agent/agent-class.md): the Agent class, observations, and the environment
+- [A Baseline Agent](agent/baseline.md): a simple agent you can start from
 - [Testing in Grid Play](grid-play/index.md): run and debug your agent in the browser
 
 ## Two tools, one project
