@@ -14,6 +14,7 @@ The `GridState` representation is grid-centric and provides methods that you can
 | `height` | `int` | Grid height in tiles |
 | `movement` | `BaseMovement` | Movement function configuration |
 | `objective` | `BaseObjective` | Win/lose condition configuration |
+| `step_cost` | `int` | Reward cost applied each turn (`3` by default) |
 | `seed` | `int` or `None` | RNG seed for deterministic behavior |
 
 ### Grid structure
