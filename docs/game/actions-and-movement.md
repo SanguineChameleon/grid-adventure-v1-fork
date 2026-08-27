@@ -37,9 +37,6 @@ In a turn, the agent can move to an adjacent tile (Up / Down / Left / Right).
 
 The example shows the agent performing basic movements.
 
-!!! warning "Redundant actions"
-    Moving into a blocking entity (a wall or a locked door) also counts as a turn!
-
 ![Basic_Movement](../assets/basic_movement.gif)
 
 ## Collecting items
@@ -48,9 +45,6 @@ If the agent is on the same tile as any collectible items, it can use a turn (`P
 
 The example shows the agent picking up items such as keys, gems, and coins.
 
-!!! warning "Redundant actions"
-    Picking up on a tile with nothing to collect also counts as a turn!
-
 ![Collect_items](../assets/collect_items.gif)
 
 ## Key and door
@@ -58,9 +52,6 @@ The example shows the agent picking up items such as keys, gems, and coins.
 To unlock a door, the agent must first collect a key, then move adjacent to the door and unlock it (`USE_KEY`).
 
 The example shows the agent collecting the key, then unlocking the door to pass through.
-
-!!! warning "Redundant actions"
-    Using a key when there are no doors nearby does not consume the key, but it also counts as a turn!
 
 ![Key_Door](../assets/key_and_door.gif)
 
@@ -71,6 +62,16 @@ To push a box, the agent must stand adjacent to it and move in the direction of 
 The example shows the agent pushing the box aside to reach the exit tile.
 
 ![Push_Box](../assets/push_box.gif)
+
+## Redundant actions
+
+Some actions have no useful effect in certain situations, but they still take a turn and incur the turn cost. For example:
+
+- Moving into a blocking entity, such as a wall or a locked door, leaves the agent in place.
+- Picking up on a tile with nothing to collect does nothing.
+- Using a key when there is no adjacent door does nothing, and does not consume the key.
+
+When planning, remember that a wasted action is still a turn.
 
 ---
 

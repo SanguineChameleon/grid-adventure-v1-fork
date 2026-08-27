@@ -29,7 +29,6 @@ nav:
       - GridState: agent/gridstate.md
       - ImageObservation: agent/image-observation.md
       - The Environment: agent/environment.md
-      - A Baseline Agent: agent/baseline.md
   - Testing in Grid Play:
       - Overview: grid-play/index.md
       - Game Tab: grid-play/game.md

@@ -33,18 +33,28 @@ Scoring works as follows:
 
 See [Entities](game/entities.md) for the appearance and behavior of each object, and [Powerups & Effects](game/powerups.md) for how powerup limits work.
 
-## Your task
+## Your turn
 
-You implement one method, `step`, that returns an **[Action](game/actions-and-movement.md)** each turn:
+You write an **Agent** class that plays the game. Your agent keeps whatever internal state it needs, and each turn it decides what to do in its `step` method, which returns an **[Action](game/actions-and-movement.md)**:
 
 ```python
-def step(self, obs) -> Action:
-    ...
+from grid_adventure.actions import Action
+
+class Agent:
+    def __init__(self):
+        # Set up anything your agent needs to remember.
+        ...
+
+    def step(self, obs) -> Action:
+        # Look at the observation and decide the next action.
+        ...
 ```
 
 Each turn your agent receives an **observation** (a snapshot of the game) and returns an action:
 
 > observation → step() → action → new observation → …
+
+See [Building Your Agent](agent/agent-class.md) for the full Agent interface, including the optional `parse` and `info` methods for debugging in Grid Play.
 
 ## Where to go next
 
@@ -55,7 +65,6 @@ Read these sections to learn the details and build your agent:
 - [Objectives & Rewards](game/objectives-and-rewards.md): what you must accomplish to win, and how score works
 - [Powerups & Effects](game/powerups.md): temporary boosts and how their limits work
 - [Building Your Agent](agent/agent-class.md): the Agent class, observations, and the environment
-- [A Baseline Agent](agent/baseline.md): a simple agent you can start from
 - [Testing in Grid Play](grid-play/index.md): run and debug your agent in the browser
 
 ## Two tools, one project

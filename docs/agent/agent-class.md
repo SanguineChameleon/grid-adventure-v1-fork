@@ -59,3 +59,7 @@ In this example, the actual grid is in the blue square and the agent's vision is
 If implemented, Grid Play displays the returned dictionary each turn, letting you inspect your agent's internal variables as it plays.
 
 ![Info Window](../assets/info.png)
+
+## A baseline to start from
+
+For a worked starting point, see the baseline `Agent` in the [capstone project notebook](https://github.com/cs2109s/capstone-project/blob/main/main/capstone-project.ipynb).
