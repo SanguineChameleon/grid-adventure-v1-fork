@@ -4,7 +4,7 @@ Welcome to **Grid Adventure**, a flexible, grid-based game in which you implemen
 
 ## Objective
 
-Grid Adventure is a **turn-based** game played on a 2D grid of tiles. The agent can start at any location on the grid. To win, it must **collect all gems** on the grid (if any) and **reach the exit tile** with the lowest cost possible. The agent starts with some health points and loses if its HP drops to **0**. Some levels also limit the number of turns.
+Grid Adventure is a **turn-based** game played on a 2D grid of tiles. The agent can start at any location on the grid. To win, it must **collect all gems** on the grid (if any) and **reach the exit tile** with the lowest cost possible. The agent has 5 health by default, but a level can configure a different amount. It loses if its HP drops to **0**. Some levels also limit the number of turns.
 
 ![A Grid Adventure level](assets/grid_example.png)
 
@@ -14,21 +14,21 @@ In one turn, the agent takes exactly one **action**: move to an adjacent tile (u
 
 Scoring works as follows:
 
-- Each turn taken by the agent gives a reward of **-3**, except a turn that ends on the exit tile.
+- Most actions give a reward of **-3**. The final action that wins the game does not.
 - Each coin collected gives a reward of **+5**.
 
 ## The objects
 
 | Object | Role |
 |---|---|
-| **Agent** | The character you control. It starts with up to 5 health. |
+| **Agent** | The character you control. It has 5 health by default. |
 | **Wall** | Blocks the agent from moving past. |
 | **Exit** | The tile the agent must reach to finish. |
-| **Gem** | Must be collected. All gems are required before exiting. |
+| **Gem** | Must be collected. All gems are required before the agent can win at the exit. |
 | **Coin** | Optional. Collecting one gives a reward of 5. |
-| **Key and Door** | A key unlocks a door. Any key works, but each key is used only once. |
-| **Box** | Can be pushed onto a free tile. |
-| **Lava** | Deals 2 damage when the agent steps on it. |
+| **Key and Door** | Any key unlocks a locked door, but each key is used only once. |
+| **Box** | Can be pushed onto a tile without a blocking, pushable, or collidable entity. |
+| **Lava** | Deals 2 damage when the agent occupies it during an action. |
 | **Powerups** | Speed, Shield, and Phasing. They give temporary boosts. |
 
 See [Entities](game/entities.md) for the appearance and behavior of each object, and [Powerups & Effects](game/powerups.md) for how powerup limits work.
@@ -52,7 +52,7 @@ class Agent:
 
 Each turn your agent receives an **observation** (a snapshot of the game) and returns an action:
 
-> observation → step() → action → new observation → …
+> observation -> step() -> action -> new observation -> ...
 
 See [Building Your Agent](agent/agent-class.md) for the full Agent interface, including the optional `parse` and `info` methods for debugging in Grid Play.
 
@@ -71,6 +71,6 @@ Read these sections to learn the details and build your agent:
 
 **Grid Adventure** is the game and the Python environment your agent plugs into (the [Agent Class](agent/agent-class.md), [Observations](agent/observations.md), and the [Environment](agent/environment.md)).
 
-**[Grid Play](grid-play/index.md)** is a browser playground for playing levels and running your agent step by step, so you can see what it perceives and does.
+**[Grid Play](grid-play/index.md)** is a browser playground for playing levels and running your agent step by step. It displays the agent's chosen actions and optional debugging output.
 
-Use the tabs above to navigate and start gridding!
+Use the tabs above to navigate the documentation.

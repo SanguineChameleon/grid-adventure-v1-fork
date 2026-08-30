@@ -1,6 +1,6 @@
 # Entities
 
-Entities are the objects you encounter in the grid. This page shows each entity's appearance and behavior, and - for agent developers - the class you use to recognize it in an [observation](../agent/observations.md).
+Entities are the objects you encounter in the grid. This page shows each entity's appearance and behavior and, for agent developers, the class used to recognise it in an [observation](../agent/observations.md).
 
 !!! note "Identifying and rendering entities"
     Use `isinstance` to check an entity's type:
@@ -19,15 +19,13 @@ Entities are the objects you encounter in the grid. This page shows each entity'
             print("Key")
     ```
 
-    Each entity has several appearances. The images below show some of them (not exhaustive). 
+    Each entity has several appearances. The images below show some of them and are not exhaustive.
 
 ## Floor
 
 ![Floor](../assets/floors.png)
 
-Floor is the basic tile of the grid. Other entities can also be present on floor tiles.
-
-*Class:* `FloorEntity`
+Floor is the background rendered for every grid cell. It is implicit and does not appear as an entity in `GridState` or `State`.
 
 ## Agent
 
@@ -35,7 +33,7 @@ Floor is the basic tile of the grid. Other entities can also be present on floor
 
 The agent is the character you control and play as. It appears in the grid as a human. You move it around the grid, interact with objects, and aim to complete the objective.
 
-In one turn, the agent can either move to an adjacent tile (up/down/left/right), pick up an item, use a key to unlock a door, or do nothing (wait). The agent starts with some health points (up to 5) and the player loses if HP drops to 0.
+In one turn, the agent can either move to an adjacent tile (up/down/left/right), pick up an item, use a key to unlock a door, or do nothing (wait). The agent has 5 health by default, but a level can configure a different amount. The player loses if HP drops to 0.
 
 *Class:* `AgentEntity`
 
@@ -79,7 +77,7 @@ A coin is an **optional** item that can be picked up on the grid. Collecting a c
 
 ![Gem](../assets/gems.png)
 
-A gem is a **compulsory** item. If any gems are present, the agent must collect all of them before reaching the exit to complete the objective.
+A gem is a **compulsory** item. If any gems are present, the agent must collect all of them before it can win at the exit.
 
 *Class:* `GemEntity`
 
@@ -87,7 +85,7 @@ A gem is a **compulsory** item. If any gems are present, the agent must collect 
 
 ![Key](../assets/keys.png)
 
-A key is an optional item that can be picked up by the agent. A key is required to unlock a door. Any key can be used to unlock any door, but each key can only be used once.
+A key is an optional item that can be picked up by the agent. Any key can unlock any locked door, but each key can only be used once.
 
 *Class:* `KeyEntity`
 
@@ -95,7 +93,7 @@ A key is an optional item that can be picked up by the agent. A key is required 
 
 ![Locked_Door](../assets/locked_doors.png)
 
-A locked door blocks the agent from moving past it. To unlock a door, the agent must first collect a key. Using the key while standing adjacent to the door unlocks it, turning it into an unlocked door. The agent can then pass freely through unlocked doors. Unlocked doors appear on the grid as shown below.
+A locked door blocks the agent from moving past it. To unlock a door, the agent must first collect a key. Using the key while standing adjacent to the door unlocks it, turning it into an unlocked door. A phased agent can also unlock a locked door while occupying its tile. The agent can then pass freely through unlocked doors. Unlocked doors appear on the grid as shown below.
 
 ![Unlocked_Door](../assets/unlocked_doors.png)
 
@@ -103,14 +101,11 @@ A locked door blocks the agent from moving past it. To unlock a door, the agent 
 
 *Unlocked class:* `UnlockedDoorEntity`
 
-!!! note "Multiple keys and doors"
-    If the agent has multiple keys and there are multiple locked doors on the agent's current tile and/or on adjacent tiles, the Use Key action attempts to unlock doors in this order: current tile, then left, right, up, and down. Each door unlocked consumes one key, and unlocking stops when the agent has no keys remaining. The total number of doors unlocked cannot exceed the number of keys the agent holds.
-
 ## Box
 
 ![Box](../assets/boxes.png)
 
-A box can be moved by the agent. The agent can push a box in any direction onto a free tile. Boxes cannot be pushed onto walls, doors, or lava.
+A box can be moved by the agent. The agent pushes a box by moving into it. A box cannot be pushed onto a wall, locked door, another box, agent, or lava. It can share a tile with passable entities such as collectibles, exits, and unlocked doors.
 
 *Class:* `BoxEntity`
 
@@ -118,7 +113,7 @@ A box can be moved by the agent. The agent can push a box in any direction onto 
 
 ![Lava](../assets/lavas.png)
 
-Lava tiles inflict damage on the agent. When the agent lands on lava, it takes 2 damage. The player loses if the agent's HP drops to 0.
+Lava inflicts 2 damage whenever an action processes the agent on the same tile. This includes moving onto or through lava and taking another action while still on it. The player loses if the agent's HP drops to 0.
 
 *Class:* `LavaEntity`
 

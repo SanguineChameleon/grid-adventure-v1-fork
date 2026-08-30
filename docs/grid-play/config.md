@@ -4,12 +4,12 @@ The Config tab lets you select and configure a level before playing.
 
 ## Level sources
 
-Grid Play provides two types of level sources:
+When launched with both Grid Adventure plugins, Grid Play provides two level sources:
 
-- Intro Level Selector
-- Level Editor
+- Grid Adventure Intro
+- Grid Adventure Level Editor
 
-### Intro Level Selector
+### Grid Adventure Intro
 
 Pre-designed levels for learning the game mechanics.
 
@@ -17,25 +17,18 @@ Pre-designed levels for learning the game mechanics.
 
 | Source | Description |
 |--------|-------------|
-| **Gameplay Example** | 14 tutorial levels with progressive difficulty |
+| **Grid Adventure Intro** | 12 pre-built levels, A0 to A11 |
 
 These levels introduce the core concepts step by step: movement, items, doors, and hazards. Select a level from the dropdown and click **Save** to play.
 
-### Level Editor
+### Grid Adventure Level Editor
 
 Configurable levels for experimentation and testing.
 
-![Grid-play-config-tab-editor](../assets/grid-play-config-tab-editor.png)
-
 | Feature | Usage |
 |--------|-------------|
-| **Level Config** | Set Width, Height, Seed, Time Limit, Movement Rule, Objective, and Agent Health to configure the level |
+| **Level Config** | Set Width, Height, Seed, Turn Limit, Movement Rule, and Objective. Select the Agent tool to set Agent Health |
 | **Entity Palette, Grid, and Preview** | Use the Entity Palette and grid to design the level |
+| **Level Exporter** | Displays a function that builds the level and lets you download it as `generated_level.py` |
 
-![Grid-play-config-tab-editor-download](../assets/grid-play-config-tab-editor-download.png)
-
-| Feature | Usage |
-|--------|-------------|
-| **Level Exporter** | Generates a function that builds the level you designed |
-
-When you are done, click **Save** to proceed to the [Game](game.md) tab and test your level.
+When you are done, click **Save** to load or reset the level, then switch to the [Game](game.md) tab to test it.

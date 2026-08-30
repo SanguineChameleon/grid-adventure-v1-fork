@@ -1,6 +1,6 @@
-site_name: "Grid Adventure"
+site_name: "Grid Adventure: Variant 1"
 site_description: "Grid Adventure: build an agent that plays the game, and test it in Grid Play"
-site_url: "https://daohieu17ctt.github.io/grid-adventure-docs/"
+site_url: "https://grid-universe.github.io/grid-adventure-v1/"
 
 theme:
   name: material

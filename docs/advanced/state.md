@@ -1,9 +1,9 @@
 # State & Component Reference
 
-!!! warning "Optional - not required for the project"
+!!! warning "Optional: not required for the project"
     This page documents the low-level `State` representation. **The project can be solved without it.** It is included only for lower-level access to the game representation. If you are just getting started, use [GridState](../agent/gridstate.md) or [ImageObservation](../agent/image-observation.md) instead.
 
-The `State` representation is the internal representation used by the Grid Adventure game. It stores information in various attributes, tracked by the `EntityID` of each entity. It is the most comprehensive of the three representations and is used to generate the `GridState` and `ImageObservation` representations.
+The `State` representation is the internal representation used by Grid Adventure. It stores information in component dictionaries indexed by the `EntityID` of each entity. It is used to generate the `GridState` and `ImageObservation` representations.
 
 ## State attributes
 
@@ -25,8 +25,7 @@ The `State` class represents a game snapshot with four categories of attributes.
 
 ### Effect components
 
-All effect stores are of type `PMap[EntityID, Component]`.
-Note: `PMap` is an immutable dictionary; standard dictionary methods are available.
+All effect stores are dictionaries of type `dict[EntityID, Component]`.
 
 | Attribute | Mapped Component | Description |
 |-----------|-----------|-------------|
@@ -38,8 +37,7 @@ Note: `PMap` is an immutable dictionary; standard dictionary methods are availab
 
 ### Property components
 
-All property stores are of type `PMap[EntityID, Component]`.
-Note: `PMap` is an immutable dictionary; standard dictionary methods are available.
+All property stores are dictionaries of type `dict[EntityID, Component]`.
 
 | Attribute | Mapped Component | Description |
 |-----------|-----------|-------------|
@@ -66,6 +64,7 @@ Note: `PMap` is an immutable dictionary; standard dictionary methods are availab
 
 | Attribute | Type | Default | Description |
 |-----------|------|---------|-------------|
+| `step_cost` | `int` | `0` | Score cost applied to each non-terminal action. Grid Adventure levels configure it as `3` |
 | `turn` | `int` | `0` | Current turn number |
 | `score` | `int` | `0` | Cumulative score |
 | `win` | `bool` | `False` | `True` if the objective is met |
@@ -78,12 +77,13 @@ Note: `PMap` is an immutable dictionary; standard dictionary methods are availab
 
 | Method | Description |
 |--------|-------------|
-| `state.description` | Property returning a `PMap` of all non-empty state attributes |
-| `from_state(state)` | Converts immutable `State` to mutable [`GridState`](../agent/gridstate.md) |
+| `state.description` | Property returning a dictionary of public state fields and non-empty component stores |
+| `state.clone()` | Returns a separate copy of the state |
+| `from_state(state)` | Converts `State` to [`GridState`](../agent/gridstate.md) |
 
 ## Entities
 
-All effects and components are represented by entities. Each entity is assigned a unique `EntityID` at creation, which is used to map to each of the entity's attributes.
+Each entity is assigned a unique `EntityID` at creation. Component stores map these IDs to the components held by each entity.
 
 ### Entity types
 
@@ -112,9 +112,9 @@ This is the entity controlled by the user.
 
 | Attribute | Type | Description |
 |---|---|---|
-| health | Health Class | Health of the agent - its max and current health |
-| inventory_list | Inventory Class | List of entities in the agent's inventory |
-| status_list | Status Class | List of entities representing the statuses active on the agent |
+| health | `Health` | Maximum and current health of the agent |
+| inventory_list | `list[BaseEntity]` | Entities in the agent's inventory |
+| status_list | `list[BaseEntity]` | Effects active on the agent |
 
 | Available Method | Inputs | Description |
 |---|---|---|
@@ -158,7 +158,7 @@ A blocking entity that the agent cannot walk or push through. It becomes an [Unl
 |---|---|---|
 | locked | Locked Class | Locked door that can be unlocked by a key |
 
-Note: Each grid can have multiple key–door pairs. Any key can be used to unlock a door, but each key can only be used once.
+Note: Each grid can have multiple keys and locked doors. Any key can unlock any locked door, but each key can only be used once.
 
 ### CollectibleEntity
 
@@ -185,7 +185,7 @@ Note: The score received for collecting a coin is fixed at 5.
 
 #### [GemEntity](../game/entities.md#gem)
 
-A **compulsory** collectible that must be collected by the agent before it can enter the exit. The gem entity has no attributes.
+A **compulsory** collectible that must be collected before the agent can win at the exit. The gem entity has no additional attributes.
 
 #### [KeyEntity](../game/entities.md#key)
 
@@ -214,6 +214,7 @@ A collectible power-up granting the agent immunity while walking on damaging til
 
 | Attribute | Type | Description |
 |---|---|---|
+| immunity | `Immunity` | Prevents damage to the agent |
 | usage_limit | UsageLimit Class | Shows the remaining durability of the shield |
 
 Note: The usage limit is a constant 5 uses.
@@ -224,13 +225,14 @@ A collectible power-up granting the agent the ability to walk through [BlockingE
 
 | Attribute | Type | Description |
 |---|---|---|
+| phasing | `Phasing` | Allows the agent to pass through blocking entities and avoid damage |
 | time_limit | TimeLimit Class | Saves the amount, indicating the number of turns the powerup is active |
 
 Note: The time limit is a constant 5 steps.
 
 ### Other entities
 
-These entities extend directly from `BaseEntity`. 
+These entities extend directly from `BaseEntity`.
 
 #### [ExitEntity](../game/entities.md#exit)
 
@@ -267,16 +269,22 @@ Use the code below to familiarise yourself with the `State` representation and e
   ```python
   state.description
   ```
-  Returns a `PMap` containing only populated component stores.
+  Returns a dictionary containing public state fields and populated component stores.
 
 - **Apply an action**
   ```python
-  step(State, Action) -> State
+  step(state, Action.RIGHT) -> State
   ```
 
 ### Full example
 
 ```python
+from grid_adventure.actions import Action
+from grid_adventure.constants import STEP_COST
+from grid_adventure.entities import AgentEntity, BoxEntity, ExitEntity
+from grid_adventure.grid import GridState, to_state
+from grid_adventure.movements import MOVEMENTS
+from grid_adventure.objectives import OBJECTIVES
 from grid_adventure.step import step
 
 # Creating the grid still requires GridState
@@ -286,6 +294,7 @@ gridstate = GridState(
     movement=MOVEMENTS["cardinal"],
     objective=OBJECTIVES["collect_gems_and_exit"],
     seed=0,
+    step_cost=STEP_COST,
 )
 
 # Add an agent, a box, and an exit to the grid
@@ -293,13 +302,13 @@ gridstate.add((0, 1), AgentEntity())
 gridstate.add((1, 1), BoxEntity())
 gridstate.add((3, 1), ExitEntity())
 
-# Convert GridState to the immutable State representation
+# Convert GridState to the low-level State representation
 state = to_state(gridstate)
 
 # state.description contains only populated component stores
 # (e.g. position, agent, blocking, etc.)
 
-# state.position maps EntityID -> (x, y) coordinates and can be used to locate entities
+# state.position maps EntityID to Position objects
 
 # Retrieve the agent's EntityID
 agent_id = next(iter(state.agent.keys()))
@@ -309,8 +318,10 @@ box_entity_ids = list(state.pushable.keys())
 box_id = box_entity_ids[0]
 
 # Look up current positions
-agent_position = state.position.get(agent_id)  # (0, 1)
-box_position = state.position.get(box_id)       # (1, 1)
+agent_position = state.position[agent_id]
+box_position = state.position[box_id]
+agent_coordinates = (agent_position.x, agent_position.y)  # (0, 1)
+box_coordinates = (box_position.x, box_position.y)  # (1, 1)
 
 # Check whether an entity is considered blocking
 is_agent_blocking = agent_id in state.blocking  # False
@@ -320,5 +331,6 @@ is_box_blocking = box_id in state.blocking       # True
 state = step(state, Action.RIGHT)
 
 # After stepping, the agent's position is updated
-new_agent_position = state.position.get(agent_id)  # (1, 1)
+new_agent_position = state.position[agent_id]
+new_agent_coordinates = (new_agent_position.x, new_agent_position.y)  # (1, 1)
 ```

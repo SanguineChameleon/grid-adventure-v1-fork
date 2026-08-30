@@ -14,7 +14,7 @@ The `GridState` representation is grid-centric and provides methods that you can
 | `height` | `int` | Grid height in tiles |
 | `movement` | `BaseMovement` | Movement function configuration |
 | `objective` | `BaseObjective` | Win/lose condition configuration |
-| `step_cost` | `int` | Reward cost applied each turn (`3` by default) |
+| `step_cost` | `int` | Reward cost applied to each non-terminal turn. The constructor default is `0`; Grid Adventure levels configure it as `3` |
 | `seed` | `int` or `None` | RNG seed for deterministic behavior |
 
 ### Grid structure
@@ -34,7 +34,7 @@ The `GridState` representation is grid-centric and provides methods that you can
 | `message` | `str` or `None` | `None` | Optional status message for display |
 | `turn_limit` | `int` or `None` | `None` | Maximum turns allowed |
 
-## Methods
+## Instance methods
 
 | Method | Returns | Description |
 |--------|---------|-------------|
@@ -45,8 +45,14 @@ The `GridState` representation is grid-centric and provides methods that you can
 | `GridState.move_obj(from_pos, obj, to_pos)` | `bool` | Move an entity between cells; returns `True` if successful |
 | `GridState.clear_cell(pos)` | `int` | Remove all entities from a cell; returns the count |
 | `GridState.objects_at(pos)` | `list[BaseEntity]` | Return a shallow copy of the entities at a position |
-| `step(gridState, action)` | `GridState` | Generate a new `GridState` after applying an action |
-| `to_state(gridState)` | `State` | Convert mutable `GridState` to immutable [`State`](../advanced/state.md) |
 
-- `pos` is a `Position`, represented as `(int, int)`.
+## Conversion and simulation helpers
+
+| Function | Returns | Description |
+|----------|---------|-------------|
+| `from_state(state)` | `GridState` | Convert a [`State`](../advanced/state.md) to a specialised Grid Adventure `GridState` |
+| `to_state(grid_state)` | `State` | Convert a `GridState` to [`State`](../advanced/state.md) |
+| `step(grid_state, action)` | `GridState` | Return a new `GridState` after applying an `Action` |
+
+- `pos` is a position tuple represented as `(int, int)`.
 - `obj` is a `BaseEntity`, the parent class of all entities. For the list of entities, their appearances, and how to identify them, see [Entities](../game/entities.md).

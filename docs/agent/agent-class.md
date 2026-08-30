@@ -38,13 +38,13 @@ Runs once when the agent is instantiated.
 
 > `step(self, obs: GridState | ImageObservation) -> Action`
 
-Invoked every turn in the main agent–environment loop. This is the "brain" of your agent: it inspects the current [observation](observations.md) and decides which [Action](../game/actions-and-movement.md) to return.
+Invoked every turn in the main agent-environment loop. It inspects the current [observation](observations.md) and decides which [Action](../game/actions-and-movement.md) to return.
 
 ## Parse - `parse` (optional)
 
 > `parse(self, obs: ImageObservation) -> GridState`
 
-If implemented, Grid Play calls it every step to render what your agent currently sees - the [GridState](gridstate.md) your agent reconstructs from an [ImageObservation](image-observation.md). This lets you spot and correct errors in how your agent interprets the image.
+Defining `parse` enables the Vision display in Grid Play. In ImageObservation mode, Grid Play calls this method after each step to render the [GridState](gridstate.md) your agent reconstructs from an [ImageObservation](image-observation.md). This lets you spot and correct errors in how your agent interprets the image. In GridState mode, Grid Play renders the current GridState directly and does not call `parse`.
 
 Your agent's vision appears in the bottom-right corner of the screen.
 
@@ -62,4 +62,4 @@ If implemented, Grid Play displays the returned dictionary each turn, letting yo
 
 ## A baseline to start from
 
-For a worked starting point, see the baseline `Agent` in the [capstone project notebook](https://github.com/cs2109s/capstone-project/blob/main/main/capstone-project.ipynb).
+For a worked starting point, refer to the baseline `Agent` in the main notebook.

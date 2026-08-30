@@ -8,7 +8,7 @@ Every powerup expires according to one of two limit types: a **turn limit** or a
 
 ### Turn limit
 
-A powerup with a **turn limit** counts down by 1 after every turn, and expires when its counter reaches 0.
+A powerup with a **turn limit** does not count down on the action used to pick it up. After that, it counts down by 1 after every turn and expires when its counter reaches 0.
 
 If the agent holds several instances of the same powerup, each instance counts down independently on every turn.
 
@@ -22,12 +22,12 @@ If the agent holds several instances of the same powerup, only one instance is u
 
 ![Speed](../assets/boots.png)
 
-The speed powerup lets the agent move 2 tiles in a single turn. The agent can still be blocked by objects in its path. After the effect expires, the agent returns to moving 1 tile per turn.
+The speed powerup lets the agent move 2 tiles in a single turn. Each intermediate tile is processed, so the agent can be blocked or damaged before reaching the second tile. After the effect expires, the agent returns to moving 1 tile per turn.
 
 - **Limit:** turn limit of 5
 - **Class:** `SpeedPowerUpEntity`
 
-The example shows the agent's movement once the boots are picked up. 
+The example shows the agent's movement once the boots are picked up.
 
 !!! warning "Blocking entities undermine speed boost"
     Note that walls and locked doors can still restrict the agent from moving 2 tiles if they are on the agent's trajectory.
@@ -41,7 +41,7 @@ The example shows the agent's movement once the boots are picked up.
 
 ![Shield](../assets/shields.png)
 
-The shield protects the agent from damage. One use is consumed each time the agent lands on lava, letting it pass through unharmed.
+The shield protects the agent from damage. One use is consumed each time the shield prevents damage, including when the agent takes another action while standing on lava.
 
 - **Limit:** usage limit of 5
 - **Class:** `ShieldPowerUpEntity`
@@ -58,7 +58,7 @@ By collecting the shield powerup, the agent can safely pass through the lava:
 
 ![Phasing](../assets/ghosts.png)
 
-Phasing lets the agent move through objects - walls, doors, and boxes. While it is active, the agent also takes no damage from lava.
+Phasing lets the agent move through blocking objects such as walls and locked doors. When the agent moves into a box, it still pushes the box if the destination is available. If the box cannot be pushed, phasing allows the agent to pass through it. While phasing is active, the agent also takes no damage from lava.
 
 - **Limit:** turn limit of 5
 - **Class:** `PhasingPowerUpEntity`
@@ -66,8 +66,8 @@ Phasing lets the agent move through objects - walls, doors, and boxes. While it 
 The example shows the agent collecting the phasing powerup to pass through walls and reach the exit tile.
 
 !!! warning "Don't trap yourself"
-    The agent might find itself inside a wall when phasing ends. Don't worry; the agent can still move out of the wall, to any adjacent tile that is not blocking. 
+    The agent might find itself inside a wall when phasing ends. It can still move out of the wall to any adjacent tile that is not blocking.
 
-    But if the agent is blocked on all four sides, it will be stuck there, forever!
+    If the agent is blocked on all four sides, it will be stuck.
 
 ![Phasing_Movement](../assets/ghost_movement.gif)

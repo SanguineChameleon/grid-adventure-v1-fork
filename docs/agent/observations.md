@@ -1,8 +1,8 @@
 # Observations
 
-Grid Adventure is a **turn-based** game. Each turn, your agent is given a snapshot of the game - an **observation** - and returns an [action](../game/actions-and-movement.md). That action is applied to produce the next snapshot, and the loop continues.
+Grid Adventure is a **turn-based** game. Each turn, your agent is given a snapshot of the game, called an **observation**, and returns an [action](../game/actions-and-movement.md). That action is applied to produce the next snapshot, and the loop continues.
 
-Your agent's [`step()`](agent-class.md#step-step) receives the observation in one of two forms, which you choose when setting up the [environment](environment.md):
+Your agent's [`step()`](agent-class.md#step-step) receives the observation in one of two forms. You choose the form when setting up your own [environment](environment.md), while an assessment may specify which form your agent receives.
 
 | Representation | Description |
 | --- | --- |
