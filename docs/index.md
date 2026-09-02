@@ -40,6 +40,7 @@ You write an **Agent** class that plays the game. Your agent keeps whatever inte
 ```python
 from grid_adventure.actions import Action
 
+
 class Agent:
     def __init__(self):
         # Set up anything your agent needs to remember.

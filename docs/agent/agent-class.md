@@ -16,6 +16,7 @@ A minimal agent looks like this:
 ```python
 from grid_adventure.actions import Action
 
+
 class Agent:
     def __init__(self, *args, **kwargs) -> None:
         # Declare any internal variables your agent needs.

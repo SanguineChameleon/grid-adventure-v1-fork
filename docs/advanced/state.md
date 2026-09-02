@@ -325,7 +325,7 @@ box_coordinates = (box_position.x, box_position.y)  # (1, 1)
 
 # Check whether an entity is considered blocking
 is_agent_blocking = agent_id in state.blocking  # False
-is_box_blocking = box_id in state.blocking       # True
+is_box_blocking = box_id in state.blocking  # True
 
 # Apply an action using step. step returns a new State
 state = step(state, Action.RIGHT)
