@@ -1,29 +1,38 @@
 site_name: "Grid Adventure: Variant 1"
+site_description: "Grid Adventure: build an agent that plays the game, and test it in Grid Play"
+site_url: "https://grid-universe.github.io/grid-adventure-v1/"
 
 theme:
   name: material
   features:
     - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+
 markdown_extensions:
   - admonition
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
   - attr_list
+
 nav:
-  - Introduction: index.md
-  - Player Guide:
-      - Introduction: player-guide/introduction.md
-      - Entities: player-guide/entities.md
-      - Objectives: player-guide/objectives.md
-      - Movements: player-guide/movements.md
-  - Agent Documentation:
-      - Introduction: agent-doc/introduction.md
-      - Grid Adventure Environment: agent-doc/grid_adventure_environment.md
-      - Game Representation:
-          - Overview: agent-doc/game_representation.md
-          - GridState: agent-doc/gridstate.md
-          - ImageObservation: agent-doc/image_observation.md
-          - State: agent-doc/state.md
-      - Action Class: agent-doc/action.md
-      - Agent Class: agent-doc/agent.md
+  - Start Here: index.md
+  - Playing the Game:
+      - Entities: game/entities.md
+      - Actions & Movement: game/actions-and-movement.md
+      - Objectives & Rewards: game/objectives-and-rewards.md
+      - Powerups & Effects: game/powerups.md
+  - Building Your Agent:
+      - The Agent Class: agent/agent-class.md
+      - Observations: agent/observations.md
+      - GridState: agent/gridstate.md
+      - ImageObservation: agent/image-observation.md
+      - The Environment: agent/environment.md
+  - Testing in Grid Play:
+      - Overview: grid-play/index.md
+      - Game Tab: grid-play/game.md
+      - Config Tab: grid-play/config.md
+      - State Tab: grid-play/state.md
+  - Advanced (Optional):
+      - State & Component Reference: advanced/state.md
